@@ -15,15 +15,7 @@ node {
         checkout scm
     }
 
-    stage('Build
-            echo "The sonar server could not be reached ${error}"
-        }
-     }
-
-    stage("Image Prune"){
-        imagePrune(CONTAINER_NAME)
-    }
-'){
+    stage('Build'){
         sh "mvn clean install"
     }
 
@@ -31,6 +23,14 @@ node {
         try {
             sh "mvn sonar:sonar"
         } catch(error){
+            echo "The sonar server could not be reached ${error}"
+        }
+     }
+
+    stage("Image Prune"){
+        imagePrune(CONTAINER_NAME)
+    }
+
     stage('Image Build'){
         imageBuild(CONTAINER_NAME, CONTAINER_TAG)
     }
